@@ -11,7 +11,7 @@ import 'serializers.dart';
 part 'response.g.dart';
 
 abstract class Response implements Built<Response, ResponseBuilder> {
-  // fields go here
+
   String get status;
   int get totalResults;
   BuiltList<Article> get articles;
