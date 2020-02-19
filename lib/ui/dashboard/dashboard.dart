@@ -34,10 +34,7 @@ class _DashboardContentState extends State<DashboardContent> {
         appBar: AppBar(
           title: Text("News app"),
         ),
-        body: Container(
-          child:
-              newsList.length == 0 ? _getProgressBar() : _getListViewWidget(),
-        ));
+        body: newsList.length == 0 ? _getProgressBar() : _getListViewWidget());
   }
 
   Widget _getListViewWidget() {
@@ -46,7 +43,16 @@ class _DashboardContentState extends State<DashboardContent> {
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text("${newsList[index].title}"),
+          child: Column(
+            children: <Widget>[
+              newsList[index].urlToImage != null
+                  ? Image(
+                      image: NetworkImage(newsList[index].urlToImage),
+                    )
+                  : Container(),
+              Text("${newsList[index].title}"),
+            ],
+          ),
         );
       },
     );
