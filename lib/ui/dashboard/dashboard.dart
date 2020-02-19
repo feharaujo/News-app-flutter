@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/data/NewsRepository.dart';
 import 'package:news_app/model/article.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DashboardContent extends StatefulWidget {
   @override
@@ -41,21 +42,33 @@ class _DashboardContentState extends State<DashboardContent> {
     return ListView.builder(
       itemCount: newsList.length,
       itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              newsList[index].urlToImage != null
-                  ? Image(
-                      image: NetworkImage(newsList[index].urlToImage),
-                    )
-                  : Container(),
-              Text("${newsList[index].title}"),
-            ],
+        return GestureDetector(
+          onTap: () {
+            _onItemTap(index);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                newsList[index].urlToImage != null
+                    ? Image(
+                        image: NetworkImage(newsList[index].urlToImage),
+                      )
+                    : Container(),
+                Text("${newsList[index].title}", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+              ],
+            ),
           ),
         );
       },
     );
+  }
+
+  _onItemTap(int index) async {
+    final url = newsList[index].url;
+    if (await canLaunch(url)) {
+      launch(url);
+    }
   }
 
   Widget _getProgressBar() {
