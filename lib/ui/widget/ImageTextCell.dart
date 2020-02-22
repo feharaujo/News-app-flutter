@@ -15,9 +15,12 @@ class ImageTextCell extends StatelessWidget {
       child: Column(
         children: <Widget>[
           image,
-          Text(
-            title,
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
           ),
           Align(
             alignment: Alignment.centerRight,

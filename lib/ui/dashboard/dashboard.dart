@@ -71,7 +71,7 @@ class _DashboardContentState extends State<DashboardContent> {
       // Cell with image
       return ImageTextCell(
         image: Image(
-          image: NetworkImage(article.urlToImage),
+          image: NetworkImage(_fixUrl(article.urlToImage)),
         ),
         title: article.title,
         source: article.source.name,
@@ -80,10 +80,15 @@ class _DashboardContentState extends State<DashboardContent> {
       // Cell with text and description
       return JustTextCell(
         title: article.title,
-        description:
-            article.description != null ? article.description : article.content,
+        description: article.description,
+        content: article.content,
         source: article.source.name,
       );
     }
+  }
+
+  String _fixUrl(String url) {
+    return url.replaceAll("https:////", "https://")
+        .replaceAll("http:////", "http://");
   }
 }
