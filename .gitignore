@@ -38,5 +38,4 @@ lib/generated_plugin_registrant.dart
 
 # Firebase
 **/google-services.json
-google-services.json
-.flutter-plugins-dependencies
+**/GoogleService-Info.plist
