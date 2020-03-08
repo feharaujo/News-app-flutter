@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/ui/dashboard/dashboard.dart';
+import 'package:news_app/ui/dashboard/dashboard_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.amber,
 
       ),
-      home: DashboardContent(),
+      home: DashboardPage(),
     );
   }
 }

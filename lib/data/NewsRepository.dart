@@ -1,17 +1,23 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:news_app/data/Constants.dart';
+import 'package:news_app/model/article.dart';
 import 'package:news_app/model/response.dart';
 
 class NewsRepository {
   String _authKey;
 
-  Future<Response> fetchNews() async {
+  Future<List<Article>> fetchNews() async {
     Map<String, String> _authorizationHeader = await _createAuthHeader();
     final fullUrl = baseUrl + topHeadlinesEndpoint;
     var httpResponse = await http.get(fullUrl, headers: _authorizationHeader);
     if (httpResponse.statusCode == 200) {
-      return Response.fromJson(httpResponse.body);
+      var response = Response.fromJson(httpResponse.body);
+      if (response.articles.isNotEmpty) {
+        return response.articles.asList();
+      } else {
+        return Future.error("Error fetching data");
+      }
     } else {
       return Future.error("Error fetching data");
     }
