@@ -8,18 +8,22 @@ class NewsRepository {
   String _authKey;
 
   Future<List<Article>> fetchNews() async {
-    Map<String, String> _authorizationHeader = await _createAuthHeader();
-    final fullUrl = baseUrl + topHeadlinesEndpoint;
-    var httpResponse = await http.get(fullUrl, headers: _authorizationHeader);
-    if (httpResponse.statusCode == 200) {
-      var response = Response.fromJson(httpResponse.body);
-      if (response.articles.isNotEmpty) {
-        return response.articles.asList();
+    try {
+      Map<String, String> _authorizationHeader = await _createAuthHeader();
+      final fullUrl = baseUrl + topHeadlinesEndpoint;
+      var httpResponse = await http.get(fullUrl, headers: _authorizationHeader);
+      if (httpResponse.statusCode == 200) {
+        var response = Response.fromJson(httpResponse.body);
+        if (response.articles.isNotEmpty) {
+          return response.articles.asList();
+        } else {
+          return throw NetworkError();
+        }
       } else {
-        return Future.error("Error fetching data");
+        return throw NetworkError();
       }
-    } else {
-      return Future.error("Error fetching data");
+    } catch (e) {
+      return throw NetworkError();
     }
   }
 
@@ -49,3 +53,5 @@ class NewsRepository {
     return remoteConfig;
   }
 }
+
+class NetworkError extends Error {}

@@ -4,18 +4,24 @@ import 'package:news_app/ui/dashboard/dashboard_events.dart';
 import 'package:news_app/ui/dashboard/dashboard_state.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
-  final NewsRepository repository;
+  final NewsRepository _repository;
 
-  DashboardBloc(this.repository) : assert(repository != null);
+  DashboardBloc(this._repository) : assert(_repository != null);
 
   @override
   DashboardState get initialState => LoadingState();
 
   @override
   Stream<DashboardState> mapEventToState(DashboardEvent event) async* {
+    yield LoadingState();
+
     if (event is FetchData) {
-      var articles = await repository.fetchNews();
-      yield SuccessState(articles);
+      try {
+        var articles = await _repository.fetchNews();
+        yield SuccessState(articles);
+      } on NetworkError {
+        yield ErrorState();
+      }
     }
   }
 }

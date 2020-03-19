@@ -34,7 +34,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _bloc,
-      child: DashboardWidget(widget: widget),
+      child: DashboardWidget(widget: widget, bloc: _bloc),
     );
   }
 }
@@ -43,9 +43,11 @@ class DashboardWidget extends StatelessWidget {
   const DashboardWidget({
     Key key,
     @required this.widget,
+    @required this.bloc,
   }) : super(key: key);
 
   final DashboardPage widget;
+  final DashboardBloc bloc;
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +60,8 @@ class DashboardWidget extends StatelessWidget {
           builder: (context, DashboardState state) {
             if (state is SuccessState) {
               return _getListViewWidget(state.articles);
+            } else if (state is ErrorState) {
+              return _getErrorWidget();
             } else {
               return _getProgressBar();
             }
@@ -88,6 +92,27 @@ class DashboardWidget extends StatelessWidget {
   Widget _getProgressBar() {
     return Center(
       child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _getErrorWidget() {
+    return GestureDetector(
+      onTap: () {
+        bloc.add(FetchData());
+      },
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Error on fetching news.\nClick to try again",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16.0),
+            ),
+            Icon(Icons.refresh)
+          ],
+        ),
+      ),
     );
   }
 
