@@ -55,9 +55,9 @@ class DashboardWidget extends StatelessWidget {
       ),
       body: BlocBuilder(
           bloc: BlocProvider.of<DashboardBloc>(context),
-          builder: (context, DashboardBlocState state) {
-            if (state.uiState is Success) {
-              return _getListViewWidget((state.uiState as Success).articles);
+          builder: (context, DashboardState state) {
+            if (state is SuccessState) {
+              return _getListViewWidget(state.articles);
             } else {
               return _getProgressBar();
             }

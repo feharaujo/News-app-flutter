@@ -1,23 +1,13 @@
 import 'package:news_app/model/article.dart';
 
-class DashboardBlocState {
-  UiState uiState;
+abstract class DashboardState {}
 
-  DashboardBlocState._();
+class LoadingState extends DashboardState {}
 
-  factory DashboardBlocState.initial() {
-    return DashboardBlocState._()..uiState = Loading();
-  }
-}
+class ErrorState extends DashboardState {}
 
-abstract class UiState {}
-
-class Loading extends UiState {}
-
-class Error extends UiState {}
-
-class Success extends UiState {
+class SuccessState extends DashboardState {
   List<Article> articles;
 
-  Success(this.articles);
+  SuccessState(this.articles);
 }

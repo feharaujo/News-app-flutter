@@ -1,24 +1,21 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/data/NewsRepository.dart';
-import 'package:news_app/model/response.dart';
-import 'package:news_app/ui/dashboard/dashboard_state.dart';
 import 'package:news_app/ui/dashboard/dashboard_events.dart';
+import 'package:news_app/ui/dashboard/dashboard_state.dart';
 
-class DashboardBloc extends Bloc<DashboardEvent, DashboardBlocState> {
-
+class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final NewsRepository repository;
 
   DashboardBloc(this.repository) : assert(repository != null);
 
   @override
-  DashboardBlocState get initialState => DashboardBlocState.initial();
+  DashboardState get initialState => LoadingState();
 
   @override
-  Stream<DashboardBlocState> mapEventToState(DashboardEvent event) async* {
+  Stream<DashboardState> mapEventToState(DashboardEvent event) async* {
     if (event is FetchData) {
       var articles = await repository.fetchNews();
-      yield state..uiState = Success(articles);
+      yield SuccessState(articles);
     }
   }
-
 }
