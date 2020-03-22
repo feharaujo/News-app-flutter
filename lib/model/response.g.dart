@@ -124,16 +124,22 @@ class ResponseBuilder implements Builder<Response, ResponseBuilder> {
   _$Response _$v;
 
   String _status;
+
   String get status => _$this._status;
+
   set status(String status) => _$this._status = status;
 
   int _totalResults;
+
   int get totalResults => _$this._totalResults;
+
   set totalResults(int totalResults) => _$this._totalResults = totalResults;
 
   ListBuilder<Article> _articles;
+
   ListBuilder<Article> get articles =>
       _$this._articles ??= new ListBuilder<Article>();
+
   set articles(ListBuilder<Article> articles) => _$this._articles = articles;
 
   ResponseBuilder();

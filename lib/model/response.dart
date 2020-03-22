@@ -6,14 +6,16 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:news_app/model/article.dart';
+
 import 'serializers.dart';
 
 part 'response.g.dart';
 
 abstract class Response implements Built<Response, ResponseBuilder> {
-
   String get status;
+
   int get totalResults;
+
   BuiltList<Article> get articles;
 
   Response._();
@@ -25,7 +27,8 @@ abstract class Response implements Built<Response, ResponseBuilder> {
   }
 
   static Response fromJson(String jsonString) {
-    return serializers.deserializeWith(Response.serializer, json.decode(jsonString));
+    return serializers.deserializeWith(
+        Response.serializer, json.decode(jsonString));
   }
 
   static Serializer<Response> get serializer => _$responseSerializer;

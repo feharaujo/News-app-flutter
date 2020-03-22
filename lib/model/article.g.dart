@@ -207,35 +207,51 @@ class ArticleBuilder implements Builder<Article, ArticleBuilder> {
   _$Article _$v;
 
   SourceBuilder _source;
+
   SourceBuilder get source => _$this._source ??= new SourceBuilder();
+
   set source(SourceBuilder source) => _$this._source = source;
 
   String _author;
+
   String get author => _$this._author;
+
   set author(String author) => _$this._author = author;
 
   String _title;
+
   String get title => _$this._title;
+
   set title(String title) => _$this._title = title;
 
   String _description;
+
   String get description => _$this._description;
+
   set description(String description) => _$this._description = description;
 
   String _url;
+
   String get url => _$this._url;
+
   set url(String url) => _$this._url = url;
 
   String _urlToImage;
+
   String get urlToImage => _$this._urlToImage;
+
   set urlToImage(String urlToImage) => _$this._urlToImage = urlToImage;
 
   String _publishedAt;
+
   String get publishedAt => _$this._publishedAt;
+
   set publishedAt(String publishedAt) => _$this._publishedAt = publishedAt;
 
   String _content;
+
   String get content => _$this._content;
+
   set content(String content) => _$this._content = content;
 
   ArticleBuilder();
