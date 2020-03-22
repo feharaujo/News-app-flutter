@@ -29,7 +29,7 @@ class NewsRepository {
 
   Future<Map<String, String>> _createAuthHeader() async {
     if (_authKey == null || _authKey.isEmpty) {
-      _authKey = await getAuthKey();
+      _authKey = await _getAuthKey();
       if (_authKey.isEmpty) {
         Future.error("Error fetching the auth key");
       }
@@ -38,7 +38,7 @@ class NewsRepository {
     return {authHeader: _authKey};
   }
 
-  Future<String> getAuthKey() async {
+  Future<String> _getAuthKey() async {
     RemoteConfig remoteConfig = await _getRemoteConfigInstance();
     return remoteConfig.getString(firebaseKey);
   }
