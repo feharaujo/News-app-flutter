@@ -2,7 +2,6 @@ library source;
 
 import 'dart:convert';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:news_app/model/serializers.dart';
@@ -10,9 +9,9 @@ import 'package:news_app/model/serializers.dart';
 part 'source.g.dart';
 
 abstract class Source implements Built<Source, SourceBuilder> {
-
   @nullable
   String get id;
+
   @nullable
   String get name;
 
@@ -25,7 +24,8 @@ abstract class Source implements Built<Source, SourceBuilder> {
   }
 
   static Source fromJson(String jsonString) {
-    return serializers.deserializeWith(Source.serializer, json.decode(jsonString));
+    return serializers.deserializeWith(
+        Source.serializer, json.decode(jsonString));
   }
 
   static Serializer<Source> get serializer => _$sourceSerializer;
