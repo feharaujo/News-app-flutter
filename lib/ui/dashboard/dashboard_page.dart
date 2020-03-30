@@ -16,12 +16,23 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   final _bloc = DashboardBloc(NewsRepository());
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
 
     _bloc.add(FetchData());
+    _registerScrollEvents();
+  }
+
+  void _registerScrollEvents() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        print("Max scroll");
+      }
+    });
   }
 
   @override
@@ -34,7 +45,11 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _bloc,
-      child: DashboardWidget(widget: widget, bloc: _bloc),
+      child: DashboardWidget(
+        widget: widget,
+        bloc: _bloc,
+        scrollController: _scrollController,
+      ),
     );
   }
 }
@@ -44,10 +59,12 @@ class DashboardWidget extends StatelessWidget {
     Key key,
     @required this.widget,
     @required this.bloc,
+    @required this.scrollController,
   }) : super(key: key);
 
   final DashboardPage widget;
   final DashboardBloc bloc;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +88,18 @@ class DashboardWidget extends StatelessWidget {
 
   Widget _getListViewWidget(List<Article> articles) {
     return ListView.builder(
-      itemCount: articles.length,
+      controller: scrollController,
+      itemCount: articles.length + 1,
       itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-            onTap: () {
-              _onItemTap(articles[index]);
-            },
-            child: _createCell(articles[index]));
+        if (index == articles.length) {
+          return _getProgressBar();
+        } else {
+          return GestureDetector(
+              onTap: () {
+                _onItemTap(articles[index]);
+              },
+              child: _createCell(articles[index]));
+        }
       },
     );
   }
