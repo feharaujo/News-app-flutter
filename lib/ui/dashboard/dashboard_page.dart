@@ -113,7 +113,10 @@ class DashboardWidget extends StatelessWidget {
 
   Widget _getProgressBar() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 
