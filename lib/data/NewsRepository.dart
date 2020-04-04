@@ -7,10 +7,10 @@ import 'package:news_app/model/response.dart';
 class NewsRepository {
   String _authKey;
 
-  Future<List<Article>> fetchNews() async {
+  Future<List<Article>> fetchNews(int page) async {
     try {
       Map<String, String> _authorizationHeader = await _createAuthHeader();
-      final fullUrl = baseUrl + topHeadlinesEndpoint;
+      final fullUrl = baseUrl + topHeadlinesEndpoint + (pageParam + "$page");
       var httpResponse = await http.get(fullUrl, headers: _authorizationHeader);
       if (httpResponse.statusCode == 200) {
         var response = Response.fromJson(httpResponse.body);

@@ -24,19 +24,22 @@ void main() {
     blocTest(
       "Should emits Initial, Loading and success events",
       build: () async {
-        when(mockRepository.fetchNews()).thenAnswer((_) async => mockArticles);
+        when(mockRepository.fetchNews(any))
+            .thenAnswer((_) async => mockArticles);
         return DashboardBloc(mockRepository);
       },
       act: (bloc) => bloc.add(FetchData()),
+      skip: 0,
       expect: [isA<LoadingState>(), isA<SuccessState>()],
     );
 
     blocTest(
       "Should emits NetworkError on connection failure",
       build: () async {
-        when(mockRepository.fetchNews()).thenThrow(NetworkError());
+        when(mockRepository.fetchNews(any)).thenThrow(NetworkError());
         return DashboardBloc(mockRepository);
       },
+      skip: 0,
       act: (bloc) => bloc.add(FetchData()),
       expect: [isA<LoadingState>(), isA<ErrorState>()],
     );

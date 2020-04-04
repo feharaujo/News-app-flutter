@@ -10,11 +10,18 @@ class ImageTextCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Column(
         children: <Widget>[
-          image,
+          Image(
+            image: image.image,
+            width: screenWidth,
+            height: screenWidth * 0.75, // 3:4 img
+            fit: BoxFit.cover,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Align(

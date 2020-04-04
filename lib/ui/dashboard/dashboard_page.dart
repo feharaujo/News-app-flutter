@@ -30,7 +30,7 @@ class _DashboardPageState extends State<DashboardPage> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        print("Max scroll");
+        _bloc.add(FetchData());
       }
     });
   }
