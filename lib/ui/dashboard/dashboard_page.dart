@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/data/NewsRepository.dart';
@@ -17,11 +19,13 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   final _bloc = DashboardBloc(NewsRepository());
   final _scrollController = ScrollController();
+  Completer<void> _refreshCompleter;
 
   @override
   void initState() {
     super.initState();
 
+    _refreshCompleter = Completer<void>();
     _bloc.add(FetchData());
     _registerScrollEvents();
   }
@@ -43,52 +47,42 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _bloc,
-      child: DashboardWidget(
-        widget: widget,
-        bloc: _bloc,
-        scrollController: _scrollController,
-      ),
-    );
-  }
-}
-
-class DashboardWidget extends StatelessWidget {
-  const DashboardWidget({
-    Key key,
-    @required this.widget,
-    @required this.bloc,
-    @required this.scrollController,
-  }) : super(key: key);
-
-  final DashboardPage widget;
-  final DashboardBloc bloc;
-  final ScrollController scrollController;
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("News app"),
       ),
-      body: BlocBuilder(
-          bloc: BlocProvider.of<DashboardBloc>(context),
-          builder: (context, DashboardState state) {
-            if (state is SuccessState) {
-              return _getListViewWidget(state.articles);
-            } else if (state is ErrorState) {
-              return _getErrorWidget();
-            } else {
-              return _getProgressBar();
-            }
-          }),
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: BlocBuilder(
+            bloc: _bloc,
+            builder: (context, DashboardState state) {
+              if (state is SuccessState) {
+                _completeRefresh();
+                return _getListViewWidget(state.articles);
+              } else if (state is ErrorState) {
+                return _getErrorWidget();
+              } else {
+                return _getProgressBar();
+              }
+            }),
+      ),
     );
+  }
+
+  void _completeRefresh() {
+    _refreshCompleter?.complete();
+    _refreshCompleter = Completer();
+  }
+
+  Future<void> _refreshData() async {
+    //refreshIndicatorState.currentState?.show(atTop: true);
+    _bloc.add(RefreshData());
+    return _refreshCompleter.future;
   }
 
   Widget _getListViewWidget(List<Article> articles) {
     return ListView.builder(
-      controller: scrollController,
+      controller: _scrollController,
       itemCount: articles.length + 1,
       itemBuilder: (BuildContext context, int index) {
         if (index == articles.length) {
@@ -123,7 +117,7 @@ class DashboardWidget extends StatelessWidget {
   Widget _getErrorWidget() {
     return GestureDetector(
       onTap: () {
-        bloc.add(FetchData());
+        _bloc.add(FetchData());
       },
       child: Center(
         child: Column(

@@ -19,7 +19,7 @@ class ImageTextCell extends StatelessWidget {
           Image(
             image: image.image,
             width: screenWidth,
-            height: screenWidth * 0.75, // 3:4 img
+            height: screenWidth * 0.6, // 3:4 img
             fit: BoxFit.cover,
           ),
           Padding(

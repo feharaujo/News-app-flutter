@@ -17,18 +17,33 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   @override
   Stream<DashboardState> mapEventToState(DashboardEvent event) async* {
     if (event is FetchData) {
-      try {
-        var articles = await _repository.fetchNews(_page);
-        _allArticles.addAll(articles);
-        yield SuccessState(_allArticles);
-        increasePageNumber();
-      } on NetworkError {
-        yield ErrorState();
-      }
+      yield* _fetchArticlesPerPage(_page);
+    } else if (event is RefreshData) {
+      _resetCounter();
+      _resetArticles();
+      yield* _fetchArticlesPerPage(_page);
     }
   }
 
-  void increasePageNumber() {
+  Stream<DashboardState> _fetchArticlesPerPage(int page) async* {
+    try {
+      var articles = await _repository.fetchNews(_page);
+      yield SuccessState(articles);
+      _increasePageNumber();
+    } on NetworkError {
+      yield ErrorState();
+    }
+  }
+
+  void _increasePageNumber() {
     _page++;
+  }
+
+  void _resetCounter() {
+    _page = 1;
+  }
+
+  void _resetArticles() {
+    _allArticles.clear();
   }
 }
