@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ImageTextCell extends StatelessWidget {
-  final Image image;
+  final String image;
   final String title;
   final String source;
 
@@ -16,11 +17,18 @@ class ImageTextCell extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Column(
         children: <Widget>[
-          Image(
-            image: image.image,
-            width: screenWidth,
-            height: screenWidth * 0.6, // 3:4 img
-            fit: BoxFit.cover,
+          Stack(
+            children: <Widget>[
+              Center(child: CircularProgressIndicator()),
+              FadeInImage.memoryNetwork(
+                fadeInDuration: Duration(milliseconds: 150),
+                placeholder: kTransparentImage,
+                image: image,
+                width: screenWidth,
+                height: screenWidth * 0.6, // 3:4 img
+                fit: BoxFit.cover,
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),

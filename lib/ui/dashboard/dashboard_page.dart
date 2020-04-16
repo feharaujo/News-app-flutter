@@ -144,9 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
     if (article.urlToImage != null && article.urlToImage.isNotEmpty) {
       // Cell with image
       return ImageTextCell(
-        image: Image(
-          image: NetworkImage(_fixUrl(article.urlToImage)),
-        ),
+        image: _fixUrl(article.urlToImage),
         title: article.title,
         source: article.source.name,
       );
