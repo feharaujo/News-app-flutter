@@ -19,11 +19,17 @@ class NewsRepository {
         } else {
           return throw NetworkError();
         }
+      } else if (httpResponse.statusCode == API_FREE_LIMIT_CODE) {
+        return throw ApiLimitError();
       } else {
         return throw NetworkError();
       }
     } catch (e) {
-      return throw NetworkError();
+      if (e is ApiLimitError) {
+        return throw e;
+      } else {
+        return throw NetworkError();
+      }
     }
   }
 
@@ -55,3 +61,5 @@ class NewsRepository {
 }
 
 class NetworkError extends Error {}
+
+class ApiLimitError extends Error {}

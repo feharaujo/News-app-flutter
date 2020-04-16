@@ -4,3 +4,5 @@ final pageParam = "&page=";
 
 final authHeader = "Authorization";
 final firebaseKey = "api_key";
+
+const API_FREE_LIMIT_CODE = 426;

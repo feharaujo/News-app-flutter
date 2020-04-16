@@ -51,21 +51,21 @@ class _DashboardPageState extends State<DashboardPage> {
       appBar: AppBar(
         title: Text("News app"),
       ),
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: BlocBuilder(
-            bloc: _bloc,
-            builder: (context, DashboardState state) {
-              if (state is SuccessState) {
-                _completeRefresh();
-                return _getListViewWidget(state.articles);
-              } else if (state is ErrorState) {
-                return _getErrorWidget();
-              } else {
-                return _getProgressBar();
-              }
-            }),
-      ),
+      body: BlocBuilder(
+          bloc: _bloc,
+          builder: (context, DashboardState state) {
+            if (state is SuccessState) {
+              //_completeRefresh();
+              return _getListViewWidget(state.articles, true);
+            } else if (state is ErrorState) {
+              // TODO: change to snackbar
+              return _getErrorWidget();
+            } else if (state is EndLoading) {
+              return _getListViewWidget(state.articles, false);
+            } else {
+              return _getProgressBar();
+            }
+          }),
     );
   }
 
@@ -80,12 +80,17 @@ class _DashboardPageState extends State<DashboardPage> {
     return _refreshCompleter.future;
   }
 
-  Widget _getListViewWidget(List<Article> articles) {
+  Widget _getListViewWidget(List<Article> articles, bool loadingVisible) {
+    int length = articles.length;
+    if (loadingVisible) {
+      length = articles.length + 1;
+    }
+
     return ListView.builder(
       controller: _scrollController,
-      itemCount: articles.length + 1,
+      itemCount: length,
       itemBuilder: (BuildContext context, int index) {
-        if (index == articles.length) {
+        if (index == articles.length && loadingVisible) {
           return _getProgressBar();
         } else {
           return GestureDetector(

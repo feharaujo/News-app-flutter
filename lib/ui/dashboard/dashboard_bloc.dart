@@ -28,8 +28,11 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   Stream<DashboardState> _fetchArticlesPerPage(int page) async* {
     try {
       var articles = await _repository.fetchNews(_page);
-      yield SuccessState(articles);
+      _allArticles.addAll(articles);
+      yield SuccessState(_allArticles);
       _increasePageNumber();
+    } on ApiLimitError {
+      yield EndLoading(_allArticles);
     } on NetworkError {
       yield ErrorState();
     }
